@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_printer_form_inherit_project" model="ir.ui.view">
+        <field name="name">pos.printer.form.inherit.project</field>
+        <field name="model">pos.printer</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_printer_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='proxy_ip']" position="after">
+                <field name="project_id" 
+                       invisible="printer_type != 'project'" 
+                       required="printer_type == 'project'"
+                       options="{'no_create': True}"
+                       domain="[('active', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Acción para verificar impresoras de tipo proyecto -->
+    <record id="action_check_project_printers" model="ir.actions.server">
+        <field name="name">Verificar impresoras de proyecto</field>
+        <field name="model_id" ref="model_pos_printer"/>
+        <field name="binding_model_id" ref="model_pos_printer"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = model.check_project_printers()</field>
+    </record>
+    
+    <!-- Acción para corregir impresoras de tipo proyecto en la base de datos -->
+    <record id="action_fix_project_printers_in_database" model="ir.actions.server">
+        <field name="name">Corregir impresoras de proyecto en BD</field>
+        <field name="model_id" ref="model_pos_printer"/>
+        <field name="binding_model_id" ref="model_pos_printer"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = model.fix_project_printers_in_database()</field>
+    </record>
+</odoo> 
